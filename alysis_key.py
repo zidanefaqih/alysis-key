@@ -258,14 +258,14 @@ def cmd_url(args: argparse.Namespace) -> int:
     print(f"  Link : {activate_url}\n")
     print("  Open the link, log in, then approve.\n")
 
-    if args.no_browser:
-        print("  (--no-browser: open the link manually)")
-    else:
+    if args.open_browser:
         try:
             webbrowser.open(activate_url)
-            print("  (your browser should open automatically)")
+            print("  (opening the link in your browser...)")
         except Exception:
-            print("  (could not open a browser — open the link manually)")
+            print("  (could not open a browser — use the link above)")
+    else:
+        print("  (open the link above yourself; pass --open to launch a browser)")
 
     key = poll_for_key(grant["device_code"], grant["interval"], grant["expires_in"])
 
@@ -403,7 +403,9 @@ def build_parser() -> argparse.ArgumentParser:
     sub = parser.add_subparsers(dest="command")
 
     url = sub.add_parser("url", help="start device login and store the key as keyN.txt")
-    url.add_argument("--no-browser", action="store_true", help="do not open a browser")
+    url.add_argument("--open", dest="open_browser", action="store_true", help="open the approval link in a browser")
+    # Kept for compatibility with the old script; opening is off by default now.
+    url.add_argument("--no-browser", dest="open_browser", action="store_false", help=argparse.SUPPRESS)
 
     key = sub.add_parser("key", help="print a stored key (newest by default)")
     key.add_argument("index", nargs="?", type=int, help="key number, e.g. 2 for key2.txt")

@@ -38,8 +38,9 @@ python3 alysis_key.py url
 
 ## Usage
 
-1. `alysis-key url` prints a one-time code and opens
-   `https://alysiscode.com/activate?code=...`
+1. `alysis-key url` prints a one-time code and the approval link
+   (`https://alysiscode.com/activate?code=...`). It does **not** open a
+   browser — use `alysis-key url --open` if you want that.
 2. Log in and approve the device.
 3. The key is written to `~/.config/alysis-code/keyN.txt` (mode `600`, dir `700`).
 4. Print it any time:
@@ -86,9 +87,8 @@ Files that do not match `keyN.txt` — including keys created by the old
 
 ## Requirements
 
-- Python 3.10+ (uses `X | None` type syntax)
-- Any OS with a browser for the approval step (`--no-browser` prints the link
-  only)
+- Python 3.10+
+- No browser automation: `url` just prints the link (`--open` to launch one)
 
 ## License
 
